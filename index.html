@@ -1,667 +1,944 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <meta name="theme-color" content="#1e293b" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="apple-mobile-web-app-title" content="Prompt Generator" />
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Prompt Generator">
+    
     <title>AI Prompt Generator</title>
-
+    
     <!-- PWA Manifest -->
-    <link
-      rel="manifest"
-      href="data:application/json;base64,ewogICJuYW1lIjogIkFJIFByb21wdCBHZW5lcmF0b3IiLAogICJzaG9ydF9uYW1lIjogIlByb21wdCBHZW4iLAogICJkZXNjcmlwdGlvbiI6ICJBSSBQYW4gUHJvbXB0IFdyaXRlciAtIENyZWF0ZSwgQ29weSAmIFBhc3RlIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTI5M2IiLAogICJ0aGVtZV9jb2xvciI6ICIjMWUyOTNiIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTWpRaUlHaGxhV2RvZEQwaU1qUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU5DQXlOQ0lnWm1sc2JEMGlJekZsT0RCbFl5SStQSEJoZEdnZ1pEMGlUVEV5SURGMmVUSmhNakZ6TURBeE1UbDJlVEpoTWpGek1ERXhPVVl4TlVnM1lUSm1NbU15TVMwd01TMDROVE14WTJFMG5VSXhURzF2VFZkV04yZDNXamRuTjFsemJEQmpTSE5sZVM5clFUSXpRbVpOVWtoYU9ERmFRMjFhVnpoYWNGZG5LMUYzSzFGM2EyTm5OMGN6YmpkWFl6ZFlObEUzZURRdWEyRWdPVzR6VkRCMFlUTkZZVGhsYmxNek56TjNRalpvWWpJeWVtczNkM0Z6TmtoRU9HOUJVazR6UVZ0M1RVMUhhbWQzT0dOVU9UZ2lMejQ4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMjR4MjQiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ=="
-    />
-
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFJIFByb21wdCBHZW5lcmF0b3IiLAogICJzaG9ydF9uYW1lIjogIlByb21wdCBHZW4iLAogICJkZXNjcmlwdGlvbiI6ICJBSSBQYW4gUHJvbXB0IFdyaXRlciAtIENyZWF0ZSwgQ29weSAmIFBhc3RlIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTI5M2IiLAogICJ0aGVtZV9jb2xvciI6ICIjMWUyOTNiIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTWpRaUlHaGxhV2RvZEQwaU1qUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU5DQXlOQ0lnWm1sc2JEMGlJekZsT0RCbFl5SStQSEJoZEdnZ1pEMGlUVEV5SURGMmVUSmhNakZ6TURBeE1UbDJlVEpoTWpGek1ERXhPVVl4TlVnM1lUSm1NbU15TVMwd01TMDROVE14WTJFMG5VSXhURzF2VFZkV04yZDNXamRuTjFsemJEQmpTSE5sZVM5clFUSXpRbVpOVWtoYU9ERmFRMjFhVnpoYWNGZG5LMUYzSzFGM2EyTm5OMGN6YmpkWFl6ZFlObEUzZURRdWEyRWdPVzR6VkRCMFlUTkZZVGhsYmxNek56TjNRalpvWWpJeWVtczNkM0Z6TmtoRU9HOUJVazR6UVZ0M1RVMUhhbWQzT0dOVU9UZ2lMejQ4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMjR4MjQiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    
     <!-- Icons for iOS -->
-    <link
-      rel="apple-touch-icon"
-      href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMzYiIGZpbGw9IiMxZTI5M2IiLz4KPHN2ZyB4PSI2MCIgeT0iNjAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KPHA+VGV4dC4uLjwvcD4KPHN2ZyB4PSI2MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHBhdGggZD0iTTEyIDEydjJhMjFzMDAxMTl2MmEyMXMwMTEydjJhMjFzMDEgMTE5djJhMjFzMDE5IDExVjdhMmYyQ3MxSDFMMW9NVFZWN2d3WjdnTjFsc2xDbHNlWzJrQTIzQmZOUmhIODFaQ21aVzhoWnBXZytGdytGd2NnTjBnM2I3ZFljZFlObFE3eEQzeHgua2EgOWM6VD0gdGEzR2E4ZW5TMzczd0I2aGIyMnprN3dxczNpRDhvQW40M0FxM1VNR2pnM0hjVDk4aWRyOTdiQ3JyNUVsNUlJM1NXZz09Ii8+CjwvZz4KPC9zdmc+"
-    />
-
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMzYiIGZpbGw9IiMxZTI5M2IiLz4KPHN2ZyB4PSI2MCIgeT0iNjAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KPHA+VGV4dC4uLjwvcD4KPHN2ZyB4PSI2MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHBhdGggZD0iTTEyIDEydjJhMjFzMDAxMTl2MmEyMXMwMTEydjJhMjFzMDEgMTE5djJhMjFzMDE5IDExVjdhMmYyQ3MxSDFMMW9NVFZWN2d3WjdnTjFsc2xDbHNlWzJrQTIzQmZOUmhIODFaQ21aVzhoWnBXZytGdytGd2NnTjBnM2I3ZFljZFlObFE3eEQzeHgua2EgOWM6VD0gdGEzR2E4ZW5TMzczd0I2aGIyMnprN3dxczNpRDhvQW40M0FxM1VNR2pnM0hjVDk4aWRyOTdiQ3JyNUVsNUlJM1NXZz09Ii8+CjwvZz4KPC9zdmc+">
+    
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        min-height: 100vh;
-        color: white;
-        overflow-x: hidden;
-      }
-
-      .container {
-        width: 375px;
-        height: 812px;
-        margin: 0 auto;
-        position: relative;
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        overflow: hidden;
-      }
-
-      /* Header */
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 60px 20px 20px 20px;
-        background: rgba(30, 41, 59, 0.9);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .logo {
-        font-size: 18px;
-        font-weight: 700;
-        color: #60a5fa;
-      }
-
-      .menu-toggle {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: background 0.3s ease;
-      }
-
-      .menu-toggle:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      /* Sidebar Menu */
-      .sidebar {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 300px;
-        height: 100vh;
-        background: rgba(30, 41, 59, 0.95);
-        backdrop-filter: blur(20px);
-        transition: right 0.3s ease;
-        z-index: 1000;
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .sidebar.active {
-        right: 0;
-      }
-
-      .sidebar-header {
-        padding: 60px 20px 20px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .close-menu {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-      }
-
-      .menu-items {
-        padding: 20px 0;
-      }
-
-      .menu-item {
-        display: block;
-        padding: 15px 20px;
-        color: white;
-        text-decoration: none;
-        transition: background 0.3s ease;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      }
-
-      .menu-item:hover,
-      .menu-item.active {
-        background: rgba(96, 165, 250, 0.1);
-        color: #60a5fa;
-      }
-
-      /* Main Content */
-      .main-content {
-        padding: 40px 20px;
-        height: calc(100vh - 120px);
-        overflow-y: auto;
-      }
-
-      .title {
-        text-align: center;
-        margin-bottom: 40px;
-      }
-
-      .title h1 {
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 8px;
-        background: linear-gradient(135deg, #60a5fa, #a78bfa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .title p {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 16px;
-      }
-
-      /* Form Styles */
-      .form-group {
-        margin-bottom: 30px;
-      }
-
-      .form-label {
-        display: block;
-        margin-bottom: 12px;
-        font-weight: 600;
-        color: #e2e8f0;
-      }
-
-      .input-container {
-        position: relative;
-      }
-
-      .form-textarea {
-        width: 100%;
-        min-height: 120px;
-        padding: 16px;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-        font-size: 16px;
-        resize: vertical;
-        transition: border-color 0.3s ease, background 0.3s ease;
-        backdrop-filter: blur(10px);
-      }
-
-      .form-textarea:focus {
-        outline: none;
-        border-color: #60a5fa;
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      .form-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-
-      .word-count {
-        position: absolute;
-        bottom: 12px;
-        right: 12px;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
-        background: rgba(30, 41, 59, 0.8);
-        padding: 4px 8px;
-        border-radius: 6px;
-      }
-
-      .word-count.warning {
-        color: #fbbf24;
-      }
-
-      .word-count.error {
-        color: #ef4444;
-      }
-
-      /* Generate Button */
-      .generate-btn {
-        width: 100%;
-        padding: 16px;
-        background: linear-gradient(135deg, #60a5fa, #a78bfa);
-        border: none;
-        border-radius: 12px;
-        color: white;
-        font-size: 18px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.3s ease;
-        margin-bottom: 30px;
-      }
-
-      .generate-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 20px 40px rgba(96, 165, 250, 0.3);
-      }
-
-      .generate-btn:active {
-        transform: translateY(0);
-      }
-
-      .generate-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      /* Result Area */
-      .result-container {
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 20px;
-        backdrop-filter: blur(10px);
-        min-height: 150px;
-        position: relative;
-      }
-
-      .result-content {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #e2e8f0;
-      }
-
-      .result-placeholder {
-        color: rgba(255, 255, 255, 0.5);
-        font-style: italic;
-        text-align: center;
-        padding: 40px 20px;
-      }
-
-      .copy-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        background: rgba(96, 165, 250, 0.2);
-        border: 1px solid rgba(96, 165, 250, 0.3);
-        color: #60a5fa;
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-      }
-
-      .copy-btn:hover {
-        background: rgba(96, 165, 250, 0.3);
-      }
-
-      /* Loading Animation */
-      .loading {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-      }
-
-      .loading-dots {
-        display: flex;
-        gap: 8px;
-      }
-
-      .loading-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #60a5fa;
-        animation: loading 1.4s infinite ease-in-out;
-      }
-
-      .loading-dot:nth-child(1) {
-        animation-delay: -0.32s;
-      }
-      .loading-dot:nth-child(2) {
-        animation-delay: -0.16s;
-      }
-
-      @keyframes loading {
-        0%,
-        80%,
-        100% {
-          transform: scale(0);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        40% {
-          transform: scale(1);
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
         }
-      }
-
-      /* Overlay */
-      .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 999;
-      }
-
-      .overlay.active {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      /* Responsive */
-      @media (max-width: 375px) {
+        
         .container {
-          width: 100vw;
-          height: 100vh;
+            width: 375px;
+            height: 812px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            overflow: hidden;
         }
-      }
-
-      /* Toast Notification */
-      .toast {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(34, 197, 94, 0.9);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-size: 14px;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 1001;
-      }
-
-      .toast.show {
-        opacity: 1;
-        visibility: visible;
-      }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 20px 20px 20px;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar.active {
+            right: 0;
+        }
+        
+        .sidebar-header {
+            padding: 60px 20px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .menu-items {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .title p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .input-container {
+            position: relative;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .word-count {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(30, 41, 59, 0.8);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        .word-count.warning {
+            color: #fbbf24;
+        }
+        
+        .word-count.error {
+            color: #ef4444;
+        }
+        
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(96, 165, 250, 0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Result Area */
+        .result-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            min-height: 150px;
+            position: relative;
+        }
+        
+        .result-content {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        
+        .result-placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(96, 165, 250, 0.2);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            color: #60a5fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(96, 165, 250, 0.3);
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #60a5fa;
+            animation: loading 1.4s infinite ease-in-out;
+        }
+        
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Responsive */
+        @media (max-width: 375px) {
+            .container {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* API Key Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1002;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h3 {
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        
+        .modal-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .modal-form {
+            margin-bottom: 20px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+        
+        .modal-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .api-help {
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .api-help h4 {
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .api-help p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .api-help a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        
+        .api-help a:hover {
+            text-decoration: underline;
+        }
+        
+        /* API Status */
+        .api-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .settings-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+        
+        .settings-btn:hover {
+            color: #60a5fa;
+        }
+        
+        .api-status.connected #apiStatusText {
+            color: #22c55e;
+        }
+        
+        .api-status.disconnected #apiStatusText {
+            color: #ef4444;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <!-- Header -->
-      <header class="header">
-        <div class="logo">Prompt Generator</div>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      </header>
-
-      <!-- Sidebar Menu -->
-      <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <div class="logo">Menu</div>
-          <button class="close-menu" onclick="toggleMenu()">✕</button>
-        </div>
-        <div class="menu-items">
-          <a
-            href="#"
-            class="menu-item active"
-            onclick="showScreen('prompt-generator')"
-            >Prompt Generator</a
-          >
-          <a href="#" class="menu-item" onclick="showScreen('prompt-pocket')"
-            >Prompt Pocket</a
-          >
-        </div>
-      </nav>
-
-      <!-- Overlay -->
-      <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Prompt Generator Screen -->
-        <div id="prompt-generator" class="screen active">
-          <div class="title">
-            <h1>AI-Powered Prompt Writer</h1>
-            <p>Create, Copy & Paste</p>
-          </div>
-
-          <form id="promptForm">
-            <div class="form-group">
-              <label class="form-label" for="inputText">Input text...</label>
-              <div class="input-container">
-                <textarea
-                  id="inputText"
-                  class="form-textarea"
-                  placeholder="Masukkan ide atau konsep Anda di sini..."
-                  maxlength="1000"
-                ></textarea>
-                <div class="word-count" id="wordCount">0/200 words</div>
-              </div>
-            </div>
-
-            <button type="submit" class="generate-btn" id="generateBtn">
-              Generate
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">Prompt Generator</div>
+            <button class="menu-toggle" onclick="toggleMenu()">
+                ☰
             </button>
-
-            <div class="form-group">
-              <label class="form-label">Results</label>
-              <div class="result-container" id="resultContainer">
-                <div class="result-placeholder" id="resultPlaceholder">
-                  Hasil prompt yang dioptimalkan akan muncul di sini setelah
-                  Anda menekan tombol Generate
-                </div>
-                <div
-                  class="result-content"
-                  id="resultContent"
-                  style="display: none"
-                ></div>
-                <button
-                  class="copy-btn"
-                  id="copyBtn"
-                  style="display: none"
-                  onclick="copyResult()"
-                >
-                  Copy
-                </button>
-              </div>
+        </header>
+        
+        <!-- Sidebar Menu -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">Menu</div>
+                <button class="close-menu" onclick="toggleMenu()">✕</button>
             </div>
-          </form>
-        </div>
-
-        <!-- Prompt Pocket Screen (placeholder) -->
-        <div id="prompt-pocket" class="screen" style="display: none">
-          <div class="title">
-            <h1>Prompt Pocket</h1>
-            <p>Your Saved Prompts</p>
-          </div>
-          <div
-            style="
-              text-align: center;
-              padding: 60px 20px;
-              color: rgba(255, 255, 255, 0.6);
-            "
-          >
-            <p>Fitur Prompt Pocket akan segera hadir!</p>
-            <p style="margin-top: 10px; font-size: 14px">
-              Simpan dan kelola prompt favorit Anda
-            </p>
-          </div>
-        </div>
-      </main>
+            <div class="menu-items">
+                <a href="#" class="menu-item active" onclick="showScreen('prompt-generator')">Prompt Generator</a>
+                <a href="#" class="menu-item" onclick="showScreen('prompt-pocket')">Prompt Pocket</a>
+            </div>
+        </nav>
+        
+        <!-- Overlay -->
+        <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Prompt Generator Screen -->
+            <div id="prompt-generator" class="screen active">
+                <div class="title">
+                    <h1>AI-Powered Prompt Writer</h1>
+                    <p>Create, Copy & Paste</p>
+                    <div class="api-status" id="apiStatus">
+                        <span id="apiStatusText">⚡ AI Ready</span>
+                        <button class="settings-btn" onclick="showApiKeyModal()">⚙️</button>
+                    </div>
+                </div>
+                
+                <form id="promptForm">
+                    <div class="form-group">
+                        <label class="form-label" for="inputText">Input text...</label>
+                        <div class="input-container">
+                            <textarea 
+                                id="inputText" 
+                                class="form-textarea" 
+                                placeholder="Masukkan ide atau konsep Anda di sini..."
+                                maxlength="1000"
+                            ></textarea>
+                            <div class="word-count" id="wordCount">0/200 words</div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="generate-btn" id="generateBtn">
+                        Generate
+                    </button>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Results</label>
+                        <div class="result-container" id="resultContainer">
+                            <div class="result-placeholder" id="resultPlaceholder">
+                                Hasil prompt yang dioptimalkan akan muncul di sini setelah Anda menekan tombol Generate
+                            </div>
+                            <div class="result-content" id="resultContent" style="display: none;"></div>
+                            <button class="copy-btn" id="copyBtn" style="display: none;" onclick="copyResult()">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Prompt Pocket Screen (placeholder) -->
+            <div id="prompt-pocket" class="screen" style="display: none;">
+                <div class="title">
+                    <h1>Prompt Pocket</h1>
+                    <p>Your Saved Prompts</p>
+                </div>
+                <div style="text-align: center; padding: 60px 20px; color: rgba(255, 255, 255, 0.6);">
+                    <p>Fitur Prompt Pocket akan segera hadir!</p>
+                    <p style="margin-top: 10px; font-size: 14px;">Simpan dan kelola prompt favorit Anda</p>
+                </div>
+            </div>
+        </main>
     </div>
-
+    
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
-
+    
+    <!-- API Key Modal -->
+    <div class="modal" id="apiKeyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔑 Setup API Key</h3>
+                <p>Masukkan API key Groq untuk menggunakan AI generator</p>
+            </div>
+            
+            <div class="api-help">
+                <h4>📋 Cara Mendapatkan API Key:</h4>
+                <p>1. Kunjungi <a href="https://console.groq.com" target="_blank">console.groq.com</a></p>
+                <p>2. Daftar/login dengan akun Google</p>
+                <p>3. Buat API key baru di dashboard</p>
+                <p>4. Copy dan paste API key di bawah ini</p>
+                <p><strong>💡 Gratis:</strong> 30 request/menit</p>
+            </div>
+            
+            <form class="modal-form" id="apiKeyForm">
+                <input 
+                    type="password" 
+                    class="modal-input" 
+                    id="apiKeyInput" 
+                    placeholder="Masukkan Groq API Key..."
+                    required
+                >
+                <div class="modal-buttons">
+                    <button type="button" class="modal-btn secondary" onclick="closeApiKeyModal()">
+                        Batal
+                    </button>
+                    <button type="submit" class="modal-btn primary">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script>
-      let wordCount = 0;
-      const maxWords = 200;
-
-      // Service Worker Registration for PWA
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register(
-              "data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIGNvbnNvbGUubG9nKCdTZXJ2aWNlIFdvcmtlciBpbnN0YWxsZWQnKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4gewogIC8vIEJhc2ljIGNhY2hpbmcgc3RyYXRlZ3kKICBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7Cn0pOw=="
-            )
-            .then((registration) => console.log("SW registered"))
-            .catch((error) => console.log("SW registration failed"));
-        });
-      }
-
-      // Word Counter
-      const inputText = document.getElementById("inputText");
-      const wordCountElement = document.getElementById("wordCount");
-      const generateBtn = document.getElementById("generateBtn");
-
-      inputText.addEventListener("input", function () {
-        const text = this.value.trim();
-        const words = text
-          ? text.split(/\s+/).filter((word) => word.length > 0)
-          : [];
-        wordCount = words.length;
-
-        updateWordCount();
-        updateGenerateButton();
-      });
-
-      function updateWordCount() {
-        wordCountElement.textContent = `${wordCount}/${maxWords} words`;
-
-        if (wordCount > maxWords) {
-          wordCountElement.className = "word-count error";
-        } else if (wordCount > maxWords * 0.8) {
-          wordCountElement.className = "word-count warning";
-        } else {
-          wordCountElement.className = "word-count";
+        let wordCount = 0;
+        const maxWords = 200;
+        
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIGNvbnNvbGUubG9nKCdTZXJ2aWNlIFdvcmtlciBpbnN0YWxsZWQnKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4gewogIC8vIEJhc2ljIGNhY2hpbmcgc3RyYXRlZ3kKICBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7Cn0pOw==')
+                .then(registration => console.log('SW registered'))
+                .catch(error => console.log('SW registration failed'));
+            });
         }
-      }
-
-      function updateGenerateButton() {
-        if (wordCount === 0 || wordCount > maxWords) {
-          generateBtn.disabled = true;
-        } else {
-          generateBtn.disabled = false;
-        }
-      }
-
-      // Menu Toggle
-      function toggleMenu() {
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
-
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("active");
-      }
-
-      // Screen Navigation
-      function showScreen(screenId) {
-        // Hide all screens
-        const screens = document.querySelectorAll(".screen");
-        screens.forEach((screen) => (screen.style.display = "none"));
-
-        // Show selected screen
-        document.getElementById(screenId).style.display = "block";
-
-        // Update menu active state
-        const menuItems = document.querySelectorAll(".menu-item");
-        menuItems.forEach((item) => item.classList.remove("active"));
-        event.target.classList.add("active");
-
-        // Close menu
-        toggleMenu();
-      }
-
-      // Generate Prompt
-      document
-        .getElementById("promptForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          generatePrompt();
+        
+        // Word Counter
+        const inputText = document.getElementById('inputText');
+        const wordCountElement = document.getElementById('wordCount');
+        const generateBtn = document.getElementById('generateBtn');
+        
+        inputText.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+            wordCount = words.length;
+            
+            updateWordCount();
+            updateGenerateButton();
         });
-
-      async function generatePrompt() {
-        const input = inputText.value.trim();
-        if (!input || wordCount > maxWords) return;
-
-        const resultContainer = document.getElementById("resultContainer");
-        const resultPlaceholder = document.getElementById("resultPlaceholder");
-        const resultContent = document.getElementById("resultContent");
-        const copyBtn = document.getElementById("copyBtn");
-
-        // Show loading
-        resultPlaceholder.style.display = "none";
-        resultContent.style.display = "block";
-        resultContent.innerHTML = `
+        
+        function updateWordCount() {
+            wordCountElement.textContent = `${wordCount}/${maxWords} words`;
+            
+            if (wordCount > maxWords) {
+                wordCountElement.className = 'word-count error';
+            } else if (wordCount > maxWords * 0.8) {
+                wordCountElement.className = 'word-count warning';
+            } else {
+                wordCountElement.className = 'word-count';
+            }
+        }
+        
+        function updateGenerateButton() {
+            if (wordCount === 0 || wordCount > maxWords) {
+                generateBtn.disabled = true;
+            } else {
+                generateBtn.disabled = false;
+            }
+        }
+        
+        // Menu Toggle
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        // Screen Navigation
+        function showScreen(screenId) {
+            // Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.style.display = 'none');
+            
+            // Show selected screen
+            document.getElementById(screenId).style.display = 'block';
+            
+            // Update menu active state
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Close menu
+            toggleMenu();
+        }
+        
+        // API Configuration
+        let GROQ_API_KEY = localStorage.getItem('groq_api_key') || '';
+        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        
+        // Update API status
+        function updateApiStatus() {
+            const apiStatus = document.getElementById('apiStatus');
+            const apiStatusText = document.getElementById('apiStatusText');
+            
+            if (GROQ_API_KEY) {
+                apiStatus.className = 'api-status connected';
+                apiStatusText.textContent = '✅ AI Connected';
+            } else {
+                apiStatus.className = 'api-status disconnected';
+                apiStatusText.textContent = '❌ Setup Required';
+            }
+        }
+        
+        // API Key Modal functions
+        function showApiKeyModal() {
+            const modal = document.getElementById('apiKeyModal');
+            const input = document.getElementById('apiKeyInput');
+            input.value = GROQ_API_KEY;
+            modal.classList.add('show');
+        }
+        
+        function closeApiKeyModal() {
+            const modal = document.getElementById('apiKeyModal');
+            modal.classList.remove('show');
+        }
+        
+        // Handle API key form
+        document.getElementById('apiKeyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            
+            if (apiKey) {
+                GROQ_API_KEY = apiKey;
+                localStorage.setItem('groq_api_key', apiKey);
+                updateApiStatus();
+                closeApiKeyModal();
+                showToast('API key berhasil disimpan!');
+            }
+        });
+        
+        // Check if API key is set
+        function checkApiKey() {
+            if (!GROQ_API_KEY) {
+                showApiKeyModal();
+                return false;
+            }
+            return true;
+        }
+        
+        // Generate Prompt
+        document.getElementById('promptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (checkApiKey()) {
+                generatePrompt();
+            }
+        });
+        
+        async function generatePrompt() {
+            const input = inputText.value.trim();
+            if (!input || wordCount > maxWords) return;
+            
+            const resultContainer = document.getElementById('resultContainer');
+            const resultPlaceholder = document.getElementById('resultPlaceholder');
+            const resultContent = document.getElementById('resultContent');
+            const copyBtn = document.getElementById('copyBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Show loading
+            resultPlaceholder.style.display = 'none';
+            resultContent.style.display = 'block';
+            resultContent.innerHTML = `
                 <div class="loading">
                     <div class="loading-dots">
                         <div class="loading-dot"></div>
                         <div class="loading-dot"></div>
                         <div class="loading-dot"></div>
                     </div>
+                    <p style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.7);">
+                        Mengoptimalkan prompt dengan AI...
+                    </p>
                 </div>
             `;
-        copyBtn.style.display = "none";
-
-        // Simulate AI processing
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // Generate optimized prompt (mock AI response)
-        const optimizedPrompt = optimizePrompt(input);
-
-        resultContent.innerHTML = optimizedPrompt;
-        copyBtn.style.display = "block";
-      }
-
-      function optimizePrompt(input) {
-        // Mock AI prompt optimization
-        const templates = [
-          `Bertindak sebagai expert dalam bidang yang relevan. ${input}. Berikan respons yang detail, terstruktur, dan actionable dengan menggunakan format yang mudah dipahami. Sertakan contoh konkret dan langkah-langkah praktis yang dapat diimplementasikan.`,
-
-          `Sebagai AI assistant yang berpengalaman, analisis dan kembangkan ide berikut: "${input}". Berikan panduan komprehensif yang mencakup: 1) Analisis mendalam, 2) Rekomendasi strategis, 3) Langkah implementasi, 4) Contoh praktis, dan 5) Tips untuk optimalisasi hasil.`,
-
-          `Kamu adalah consultant ahli. Tugas: ${input}. Format respons: Mulai dengan executive summary, lanjutkan dengan analisis detail, berikan solusi inovatif, serta tambahkan action plan yang spesifik dan measurable. Gunakan bullet points untuk clarity.`,
-
-          `Role: Subject Matter Expert. Context: ${input}. Instructions: Provide comprehensive guidance with step-by-step approach. Include best practices, common pitfalls to avoid, and success metrics. Structure your response with clear headings and actionable insights.`,
-        ];
-
-        return templates[Math.floor(Math.random() * templates.length)];
-      }
-
-      // Copy to Clipboard
-      function copyResult() {
-        const resultText = document.getElementById("resultContent").textContent;
-
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(resultText).then(() => {
-            showToast("Prompt berhasil disalin!");
-          });
-        } else {
-          // Fallback for older browsers
-          const textArea = document.createElement("textarea");
-          textArea.value = resultText;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand("copy");
-          document.body.removeChild(textArea);
-          showToast("Prompt berhasil disalin!");
+            copyBtn.style.display = 'none';
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            
+            try {
+                // Call Groq API
+                const optimizedPrompt = await callGroqAPI(input);
+                
+                resultContent.innerHTML = `<div style="white-space: pre-wrap;">${optimizedPrompt}</div>`;
+                copyBtn.style.display = 'block';
+                showToast('Prompt berhasil dioptimalkan!');
+                
+            } catch (error) {
+                console.error('Error generating prompt:', error);
+                resultContent.innerHTML = `
+                    <div style="color: #ef4444; text-align: center; padding: 20px;">
+                        <p><strong>❌ Gagal menggenerate prompt</strong></p>
+                        <p style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
+                            ${error.message || 'Terjadi kesalahan saat menghubungi API AI'}
+                        </p>
+                        <button onclick="generatePrompt()" style="margin-top: 15px; padding: 8px 16px; background: #60a5fa; border: none; border-radius: 6px; color: white; cursor: pointer;">
+                            Coba Lagi
+                        </button>
+                    </div>
+                `;
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate';
+            }
         }
-      }
+        
+        async function callGroqAPI(userInput) {
+            const systemPrompt = `Kamu adalah AI expert prompt engineer yang bertugas mengoptimalkan prompt untuk mendapatkan hasil terbaik dari AI. 
 
-      // Toast Notification
-      function showToast(message) {
-        const toast = document.getElementById("toast");
-        toast.textContent = message;
-        toast.classList.add("show");
+Tugas kamu:
+1. Analisis input user dan pahami intent/tujuannya
+2. Buat prompt yang lebih terstruktur, spesifik, dan efektif
+3. Tambahkan konteks, role, format output yang jelas
+4. Gunakan teknik prompt engineering terbaik seperti:
+   - Clear role definition
+   - Specific instructions
+   - Output format specification
+   - Examples jika perlu
+   - Step-by-step breakdown
 
-        setTimeout(() => {
-          toast.classList.remove("show");
-        }, 3000);
-      }
+Berikan response dalam bahasa Indonesia dan buat prompt yang dioptimalkan langsung siap pakai.`;
 
-      // Initialize
-      updateGenerateButton();
+            const response = await fetch(GROQ_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GROQ_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: 'llama-3.1-70b-versatile', // atau 'mixtral-8x7b-32768'
+                    messages: [
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: `Optimalisasi prompt ini: "${userInput}"`
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 1000,
+                    top_p: 1,
+                    stream: false
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0]?.message?.content || 'Tidak ada response dari API';
+        }
+        
+        // Copy to Clipboard
+        function copyResult() {
+            const resultText = document.getElementById('resultContent').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(resultText).then(() => {
+                    showToast('Prompt berhasil disalin!');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Prompt berhasil disalin!');
+            }
+        }
+        
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize
+        updateGenerateButton();
+        updateApiStatus();
+        
+        // Close modal when clicking outside
+        document.getElementById('apiKeyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeApiKeyModal();
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
