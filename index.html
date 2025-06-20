@@ -46,9 +46,21 @@
             justify-content: space-between;
             align-items: center;
             padding: 60px 20px 20px 20px;
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.97);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            width: 100%;
+            min-height: 64px;
+            transition: padding 0.25s;
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 25px 10px 10px 10px;
+                min-height: 48px;
+            }
         }
         
         .logo {
@@ -128,7 +140,7 @@
         
         /* Main Content */
         .main-content {
-            padding: 40px 20px;
+            padding: 100px 20px 40px 20px;
             height: calc(100vh - 120px);
             overflow-y: auto;
         }
@@ -530,8 +542,175 @@
             color: #ef4444;
         }
     </style>
+    <!-- Onboarding Styles (gabungan dari onboarding.html, disesuaikan agar tidak bentrok) -->
+    <style>
+        /* ONBOARDING MODAL OVERLAY */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(30,41,59,0.95);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .onboarding-overlay.hide { opacity: 0; pointer-events: none; }
+
+        /* Animated Background */
+        .onboarding-bg-animation {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .onboarding-floating-elements {
+            position: absolute;
+            width: 100%; height: 100%;
+        }
+        .onboarding-floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: onboarding-float 20s infinite ease-in-out;
+        }
+        .onboarding-floating-element:nth-child(1) { top: 10%; left: 10%; font-size: 60px; animation-delay: 0s; }
+        .onboarding-floating-element:nth-child(2) { top: 20%; right: 15%; font-size: 40px; animation-delay: -5s; }
+        .onboarding-floating-element:nth-child(3) { bottom: 30%; left: 20%; font-size: 50px; animation-delay: -10s; }
+        .onboarding-floating-element:nth-child(4) { bottom: 15%; right: 10%; font-size: 35px; animation-delay: -15s; }
+        @keyframes onboarding-float {
+            0%,100%{transform:translateY(0px)rotate(0deg);} 25%{transform:translateY(-20px)rotate(90deg);} 50%{transform:translateY(-40px)rotate(180deg);} 75%{transform:translateY(-20px)rotate(270deg);}
+        }
+
+        /* Main Onboarding Container */
+        .onboarding-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 375px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 24px 56px 24px;
+            background: rgba(30,41,59,0.85);
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(30,41,59,0.2);
+            backdrop-filter: blur(10px);
+        }
+        /* Responsive container */
+        @media (max-width: 480px) {
+            .onboarding-container { max-width: 95vw; padding: 24px 6vw 56px 6vw; }
+        }
+        @media (max-width: 375px) {
+            .onboarding-container { max-width: 100vw; padding: 16px 2vw 40px 2vw; }
+        }
+
+        /* Logo/Icon */
+        .onboarding-logo-container { margin-bottom: 36px; }
+        .onboarding-logo-icon {
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(96,165,250,0.18);
+            position: relative; overflow: hidden;
+            animation: onboarding-logoGlow 3s ease-in-out infinite alternate;
+        }
+        .onboarding-logo-icon svg { width: 54px; height: 54px; color: white; z-index: 1; }
+        @keyframes onboarding-logoGlow { 0%{transform:scale(1);} 100%{transform:scale(1.05);} }
+
+        /* Welcome Text */
+        .onboarding-welcome-content { margin-bottom: 36px; }
+        .onboarding-welcome-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; color: transparent;
+            animation: onboarding-textGradient 4s ease-in-out infinite;
+        }
+        @keyframes onboarding-textGradient { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+        .onboarding-welcome-subtitle { font-size: 17px; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 8px; }
+        .onboarding-welcome-description { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+        /* Features List */
+        .onboarding-features { margin-bottom: 36px; }
+        .onboarding-feature-item {
+            display: flex; align-items: center; justify-content: flex-start;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 13px;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .onboarding-feature-item:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+        .onboarding-feature-icon {
+            width: 36px; height: 36px; margin-right: 13px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;
+        }
+        .onboarding-feature-title { font-size: 15px; font-weight: 600; color: #e2e8f0; margin-bottom: 3px; }
+        .onboarding-feature-desc { font-size: 13px; color: rgba(255,255,255,0.6); }
+        .onboarding-feature-text { flex: 1; text-align: left; }
+
+        /* Action Buttons */
+        .onboarding-action-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 10px; }
+        .onboarding-btn {
+            padding: 14px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .onboarding-btn.primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+            box-shadow: 0 8px 24px rgba(96,165,250,0.25);
+        }
+        .onboarding-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(96,165,250,0.25); }
+        .onboarding-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.9);
+            border: 2px solid rgba(255,255,255,0.18);
+        }
+        .onboarding-btn.secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+        /* Skip Button */
+        .onboarding-skip-btn {
+            position: absolute; top: 18px; right: 18px;
+            background: none; border: none;
+            color: rgba(255,255,255,0.65); font-size: 15px; cursor: pointer;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+        .onboarding-skip-btn:hover { color: #60a5fa; }
+
+        /* Progress Indicator */
+        .onboarding-progress-indicator {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 7px;
+        }
+        .onboarding-progress-dot {
+            width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s;
+        }
+        .onboarding-progress-dot.active { background: #60a5fa; }
+    </style>
 </head>
 <body>
+    <!-- API Status Bar -->
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -548,8 +727,9 @@
                 <button class="close-menu" onclick="toggleMenu()">✕</button>
             </div>
             <div class="menu-items">
-                <a href="#" class="menu-item active" onclick="showScreen('prompt-generator')">Prompt Generator</a>
-                <a href="#" class="menu-item" onclick="showScreen('prompt-pocket')">Prompt Pocket</a>
+                <a href="#" class="menu-item active" onclick="showScreen('prompt-generator', event)">Prompt Generator</a>
+                <a href="#" class="menu-item" onclick="showScreen('prompt-pocket', event)">Prompt Pocket</a>
+                <a href="#" class="menu-item" onclick="openSettingScreen()">Pengaturan</a>
             </div>
         </nav>
         
@@ -561,12 +741,7 @@
             <!-- Prompt Generator Screen -->
             <div id="prompt-generator" class="screen active">
                 <div class="title">
-                    <h1>AI-Powered Prompt Writer</h1>
-                    <p>Create, Copy & Paste</p>
-                    <div class="api-status" id="apiStatus">
-                        <span id="apiStatusText">⚡ AI Ready</span>
-                        <button class="settings-btn" onclick="showApiKeyModal()">⚙️</button>
-                    </div>
+
                 </div>
                 
                 <form id="promptForm">
@@ -594,7 +769,7 @@
                                 Hasil prompt yang dioptimalkan akan muncul di sini setelah Anda menekan tombol Generate
                             </div>
                             <div class="result-content" id="resultContent" style="display: none;"></div>
-                            <button class="copy-btn" id="copyBtn" style="display: none;" onclick="copyResult()">
+                            <button class="copy-btn" id="copyBtn" type="button" style="display: none;" onclick="copyResult()">
                                 Copy
                             </button>
                         </div>
@@ -604,58 +779,105 @@
             
             <!-- Prompt Pocket Screen (placeholder) -->
             <div id="prompt-pocket" class="screen" style="display: none;">
-                <div class="title">
-                    <h1>Prompt Pocket</h1>
-                    <p>Your Saved Prompts</p>
-                </div>
-                <div style="text-align: center; padding: 60px 20px; color: rgba(255, 255, 255, 0.6);">
-                    <p>Fitur Prompt Pocket akan segera hadir!</p>
-                    <p style="margin-top: 10px; font-size: 14px;">Simpan dan kelola prompt favorit Anda</p>
-                </div>
-            </div>
-        </main>
+    <div class="title">
+        <h1>Prompt Pocket</h1>
+        <p>Daftar Prompt yang Disimpan</p>
     </div>
-    
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-    
-    <!-- API Key Modal -->
-    <div class="modal" id="apiKeyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🔑 Setup API Key</h3>
-                <p>Masukkan API key Groq untuk menggunakan AI generator</p>
-            </div>
-            
-            <div class="api-help">
-                <h4>📋 Cara Mendapatkan API Key:</h4>
-                <p>1. Kunjungi <a href="https://console.groq.com" target="_blank">console.groq.com</a></p>
-                <p>2. Daftar/login dengan akun Google</p>
-                <p>3. Buat API key baru di dashboard</p>
-                <p>4. Copy dan paste API key di bawah ini</p>
-                <p><strong>💡 Gratis:</strong> 30 request/menit</p>
-            </div>
-            
-            <form class="modal-form" id="apiKeyForm">
-                <input 
-                    type="password" 
-                    class="modal-input" 
-                    id="apiKeyInput" 
-                    placeholder="Masukkan Groq API Key..."
-                    required
-                >
-                <div class="modal-buttons">
-                    <button type="button" class="modal-btn secondary" onclick="closeApiKeyModal()">
-                        Batal
-                    </button>
-                    <button type="submit" class="modal-btn primary">
-                        Simpan
-                    </button>
-                </div>
-            </form>
+    <div id="promptPocketList" style="padding: 0 10px 30px 10px; max-width: 600px; margin: 0 auto;"></div>
+    <!-- Modal untuk hasil generate -->
+    <div id="pocketResultModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.70);z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:#232e3e;padding:32px 22px 22px 22px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 8px 32px rgba(30,41,59,0.22);position:relative;">
+            <button onclick="document.getElementById('pocketResultModal').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;color:#a5b4fc;font-size:22px;cursor:pointer;">✕</button>
+            <div style="font-size:13px;color:#a5b4fc;margin-bottom:8px;">Hasil Generate:</div>
+            <div id="pocketResultModalContent" style="white-space:pre-wrap;color:#e2e8f0;font-size:16px;"></div>
         </div>
     </div>
-    
+</div>
+        </main>
+    </div>
+
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="modal">
+      <div class="modal-content" style="max-width:350px;">
+        <div class="modal-header">
+          <h3>Masuk ke Akun Anda</h3>
+        </div>
+        <button class="modal-btn" style="background:#fff;color:#222;border:1px solid #ccc;margin-bottom:10px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="loginWithGoogle(event)">
+          <svg width="20" height="20" viewBox="0 0 48 48"><g><path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.9 33.1 30.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c2.8 0 5.3.9 7.3 2.5l6.2-6.2C33.5 5.1 28.9 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.5 0 19.5-7.6 21-17.5.1-.7.1-1.3.1-2 0-1.2-.1-2.3-.3-3.5z"/><path fill="#34A853" d="M6.3 14.7l7 5.1C15.5 16.1 19.4 13 24 13c2.8 0 5.3.9 7.3 2.5l6.2-6.2C33.5 5.1 28.9 3 24 3c-7.5 0-14 4.1-17.7 10.2z"/><path fill="#FBBC05" d="M24 45c6.2 0 11.5-2.1 15.3-5.8l-7-5.7c-2.1 1.4-4.8 2.2-8.3 2.2-6.1 0-11.3-4.1-13.2-9.6l-7.1 5.5C5.9 40.4 14.3 45 24 45z"/><path fill="#EA4335" d="M44.5 20H24v8.5h11.7c-1.1 3.1-4.4 6.5-11.7 6.5-7.3 0-13.3-6-13.3-13.5S16.7 10 24 10c4.1 0 7.6 1.5 10 4.2l7.4-7.4C37.8 2.7 31.3 0 24 0 10.8 0 0 10.8 0 24s10.8 24 24 24c12.2 0 22.2-9.1 23.8-21.2.1-.7.2-1.4.2-2.1 0-1.2-.1-2.3-.3-3.5z"/></g></svg>
+          Login dengan Google
+        </button>
+        <button class="modal-btn" style="background:#e5e7eb;color:#222;margin-bottom:10px;width:100%;" onclick="loginAsGuest(event)">Login sebagai Tamu</button>
+        <form id="loginForm">
+          <input type="email" id="loginEmail" class="modal-input" placeholder="Email" required>
+          <input type="password" id="loginPassword" class="modal-input" placeholder="Password" required>
+          <div id="loginError" class="error-message" style="color:#ef4444;min-height:18px;margin-bottom:10px;"></div>
+          <button type="submit" class="modal-btn primary" style="width:100%;margin-bottom:8px;">Login</button>
+          <a href="#" class="forgot-link" style="display:block;text-align:right;font-size:13px;color:#a78bfa;">Lupa Password?</a>
+        </form>
+        <div style="margin-top:12px;text-align:center;font-size:14px;">
+          Belum punya akun? <a href="#" style="color:#60a5fa;" onclick="openRegisterModal(event)">Daftar</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerOverlay" class="modal">
+      <div class="modal-content" style="max-width:350px;">
+        <div class="modal-header">
+          <h3>Daftar Akun Baru</h3>
+        </div>
+        <form id="registerForm">
+          <input type="text" id="registerName" class="modal-input" placeholder="Nama" required>
+          <input type="email" id="registerEmail" class="modal-input" placeholder="Email" required>
+          <input type="password" id="registerPassword" class="modal-input" placeholder="Password" required>
+          <div id="registerError" class="error-message" style="color:#ef4444;min-height:18px;margin-bottom:10px;"></div>
+          <button type="submit" class="modal-btn primary" style="width:100%;margin-bottom:8px;">Daftar</button>
+          <button class="modal-btn" style="width:100%;" onclick="closeRegisterModal(event)">Batal</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Setting Overlay -->
+    <div id="settingOverlay" class="modal">
+      <div class="modal-content" style="max-width:370px;">
+        <div class="modal-header">
+          <h3>Pengaturan</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <label><input type="checkbox" id="darkModeToggle"> Dark Mode</label>
+          <label><input type="checkbox" id="notifToggle"> Notifikasi</label>
+          <label>Bahasa:
+            <select id="languageSelect" class="modal-input" style="margin-top:6px;">
+              <option value="id">Bahasa Indonesia</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <button class="modal-btn secondary" onclick="openAccountSettingScreen()">Pengaturan Akun</button>
+          <button class="modal-btn" style="background:#ef4444;color:white;" onclick="logout()">Keluar</button>
+          <button class="modal-btn" onclick="closeSettingScreen()">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Setting Overlay -->
+    <div id="accountSettingOverlay" class="modal">
+      <div class="modal-content" style="max-width:370px;">
+        <div class="modal-header">
+          <h3>Pengaturan Akun</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+          <div style="width:68px;height:68px;background:#232e3e;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#a78bfa;">
+            <span id="profileInitial">A</span>
+          </div>
+          <input type="text" id="accountName" class="modal-input" placeholder="Nama">
+          <input type="email" id="accountEmail" class="modal-input" placeholder="Email">
+          <button class="modal-btn primary" style="width:100%;" onclick="saveAccount()">Simpan</button>
+          <button class="modal-btn" style="background:#ef4444;color:white;" onclick="deleteAccount()">Hapus Akun</button>
+          <button class="modal-btn" onclick="closeAccountSettingScreen()">Tutup</button>
+        </div>
+      </div>
+    </div>
+
     <script>
         let wordCount = 0;
         const maxWords = 200;
@@ -702,6 +924,59 @@
                 generateBtn.disabled = false;
             }
         }
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            let toast = document.getElementById('toastNotification');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toastNotification';
+                toast.setAttribute('role', 'status');
+                toast.setAttribute('aria-live', 'polite');
+                toast.style.position = 'fixed';
+                toast.style.bottom = '32px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.minWidth = '180px';
+                toast.style.maxWidth = '90vw';
+                toast.style.background = 'rgba(30,41,59,0.97)';
+                toast.style.color = '#fff';
+                toast.style.padding = '14px 24px';
+                toast.style.borderRadius = '12px';
+                toast.style.fontSize = '16px';
+                toast.style.zIndex = 9999;
+                toast.style.boxShadow = '0 4px 24px rgba(30,41,59,0.22)';
+                toast.style.display = 'none';
+                toast.style.transition = 'opacity 0.35s';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.background = type === 'success' ? 'rgba(30,41,59,0.97)' : 'rgba(239,68,68,0.97)';
+            toast.style.opacity = 0;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.opacity = 1; }, 10);
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                setTimeout(() => { toast.style.display = 'none'; }, 350);
+            }, 2200);
+        }
+
+        // Focus style improvement for accessibility
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('focusin', function(e) {
+                if (e.target.matches('input, textarea, button, select, a')) {
+                    e.target.style.outline = '2px solid #60a5fa';
+                    e.target.style.outlineOffset = '2px';
+                }
+            });
+            document.body.addEventListener('focusout', function(e) {
+                if (e.target.matches('input, textarea, button, select, a')) {
+                    e.target.style.outline = '';
+                    e.target.style.outlineOffset = '';
+                }
+            });
+        });
+
         
         // Menu Toggle
         function toggleMenu() {
@@ -713,143 +988,145 @@
         }
         
         // Screen Navigation
-        function showScreen(screenId) {
+        function showScreen(screenId, event) {
             // Hide all screens
             const screens = document.querySelectorAll('.screen');
             screens.forEach(screen => screen.style.display = 'none');
-            
+
             // Show selected screen
             document.getElementById(screenId).style.display = 'block';
-            
+
             // Update menu active state
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => item.classList.remove('active'));
-            event.target.classList.add('active');
-            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
             // Close menu
             toggleMenu();
         }
         
         // API Configuration
-        let GROQ_API_KEY = localStorage.getItem('groq_api_key') || '';
-        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        
-        // Update API status
-        function updateApiStatus() {
-            const apiStatus = document.getElementById('apiStatus');
-            const apiStatusText = document.getElementById('apiStatusText');
-            
-            if (GROQ_API_KEY) {
-                apiStatus.className = 'api-status connected';
-                apiStatusText.textContent = '✅ AI Connected';
+        // API key langsung di-set di kode (HARD-CODED DEMO, GANTI DENGAN KUNCI ANDA UNTUK PRODUKSI)
+        // --- Overlay Close on Outside Click ---
+        document.getElementById('settingOverlay').addEventListener('click', function(e) {
+          if (e.target === this) closeSettingScreen();
+        });
+        function openSettingScreen() {
+          document.getElementById('settingOverlay').style.display = 'flex';
+        }
+        function closeSettingScreen() {
+          document.getElementById('settingOverlay').style.display = 'none';
+        }
+        // Add toast for settings changes
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+          if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('dark_mode', '1');
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('dark_mode', '0');
+          }
+          showToast('Tema dark mode diperbarui!', 'success');
+        });
+        document.getElementById('notifToggle').addEventListener('change', function() {
+          localStorage.setItem('notif_enabled', this.checked ? '1' : '0');
+          showToast('Pengaturan notifikasi diperbarui!', 'success');
+        });
+        document.getElementById('languageSelect').addEventListener('change', function() {
+          localStorage.setItem('language', this.value);
+          showToast('Bahasa aplikasi diperbarui!', 'success');
+        });
+        document.getElementById('accountSettingOverlay').addEventListener('click', function(e) {
+          if (e.target === this) closeAccountSettingScreen();
+        });
+        // --- Set Initial State for Settings ---
+        window.addEventListener('DOMContentLoaded', function() {
+          document.getElementById('darkModeToggle').checked = localStorage.getItem('dark_mode') === '1';
+          document.getElementById('notifToggle').checked = localStorage.getItem('notif_enabled') === '1';
+          document.getElementById('languageSelect').value = localStorage.getItem('language') || 'id';
+          document.getElementById('accountName').value = localStorage.getItem('account_name') || '';
+          document.getElementById('accountEmail').value = localStorage.getItem('account_email') || '';
+          document.getElementById('profileInitial').textContent = (localStorage.getItem('account_name')||'A')[0].toUpperCase();
+          checkLogin();
+        });
+        // --- End Integrasi Fitur Baru ---
+
+        // --- Login State Checker ---
+        function checkLogin() {
+            const loginOverlay = document.getElementById('loginOverlay');
+            if (localStorage.getItem('user_logged_in') === '1') {
+                if (loginOverlay) loginOverlay.style.display = 'none';
             } else {
-                apiStatus.className = 'api-status disconnected';
-                apiStatusText.textContent = '❌ Setup Required';
+                if (loginOverlay) loginOverlay.style.display = 'flex';
             }
         }
+
+        updateGenerateButton();
+        checkLogin();
         
-        // API Key Modal functions
-        function showApiKeyModal() {
-            const modal = document.getElementById('apiKeyModal');
-            const input = document.getElementById('apiKeyInput');
-            input.value = GROQ_API_KEY;
-            modal.classList.add('show');
+        // Close modal when clicking outside
+        var apiKeyModal = document.getElementById('apiKeyModal');
+        if (apiKeyModal) {
+            apiKeyModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeApiKeyModal();
+                }
+            });
         }
+    // --- GROQ API KEY (DEMO, HARDCODED) ---
+    const GROQ_API_KEY = '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'; // Ganti dengan API key asli untuk produksi
+
+    // --- callGroqAPI Implementation ---
+    async function generatePrompt() {
+        const input = inputText.value.trim();
+        if (!input || wordCount > maxWords) return;
         
-        function closeApiKeyModal() {
-            const modal = document.getElementById('apiKeyModal');
-            modal.classList.remove('show');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultPlaceholder = document.getElementById('resultPlaceholder');
+        const resultContent = document.getElementById('resultContent');
+        const copyBtn = document.getElementById('copyBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        
+        // Show loading
+        resultPlaceholder.style.display = 'none';
+        resultContent.style.display = 'block';
+        resultContent.innerHTML = `<div class="loading"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div><p style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.7);">Mengoptimalkan prompt dengan AI...</p></div>`;
+        copyBtn.style.display = 'none';
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Generating...';
+        
+        try {
+            const optimizedPrompt = await callGroqAPI(input);
+            resultContent.innerHTML = `<div style="white-space: pre-wrap;">${optimizedPrompt}</div>`;
+            copyBtn.style.display = 'block';
+            showToast('Prompt berhasil dioptimalkan!', 'success');
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 250);
+        } catch (error) {
+            console.error('Error generating prompt:', error);
+            resultContent.innerHTML = `<div style="color: #ef4444; text-align: center; padding: 20px;"><p><strong>❌ Gagal menggenerate prompt</strong></p><p style="margin-top: 10px; font-size: 14px; opacity: 0.8;">${error.message || 'Terjadi kesalahan saat menghubungi API AI'}</p><button onclick="generatePrompt()" style="margin-top: 15px; padding: 8px 16px; background: #60a5fa; border: none; border-radius: 6px; color: white; cursor: pointer;">Coba Lagi</button></div>`;
+            showToast('Gagal menggenerate prompt!', 'error');
+        } finally {
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = 'Generate';
         }
-        
-        // Handle API key form
-        document.getElementById('apiKeyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const apiKey = document.getElementById('apiKeyInput').value.trim();
-            
-            if (apiKey) {
-                GROQ_API_KEY = apiKey;
-                localStorage.setItem('groq_api_key', apiKey);
-                updateApiStatus();
-                closeApiKeyModal();
-                showToast('API key berhasil disimpan!');
-            }
-        });
-        
-        // Check if API key is set
-        function checkApiKey() {
-            if (!GROQ_API_KEY) {
-                showApiKeyModal();
-                return false;
-            }
-            return true;
-        }
-        
-        // Generate Prompt
-        document.getElementById('promptForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (checkApiKey()) {
-                generatePrompt();
-            }
-        });
-        
-        async function generatePrompt() {
-            const input = inputText.value.trim();
-            if (!input || wordCount > maxWords) return;
-            
-            const resultContainer = document.getElementById('resultContainer');
-            const resultPlaceholder = document.getElementById('resultPlaceholder');
-            const resultContent = document.getElementById('resultContent');
-            const copyBtn = document.getElementById('copyBtn');
-            const generateBtn = document.getElementById('generateBtn');
-            
-            // Show loading
-            resultPlaceholder.style.display = 'none';
-            resultContent.style.display = 'block';
-            resultContent.innerHTML = `
-                <div class="loading">
-                    <div class="loading-dots">
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
-                    </div>
-                    <p style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.7);">
-                        Mengoptimalkan prompt dengan AI...
-                    </p>
-                </div>
-            `;
-            copyBtn.style.display = 'none';
-            generateBtn.disabled = true;
-            generateBtn.textContent = 'Generating...';
-            
-            try {
-                // Call Groq API
-                const optimizedPrompt = await callGroqAPI(input);
-                
-                resultContent.innerHTML = `<div style="white-space: pre-wrap;">${optimizedPrompt}</div>`;
-                copyBtn.style.display = 'block';
-                showToast('Prompt berhasil dioptimalkan!');
-                
-            } catch (error) {
-                console.error('Error generating prompt:', error);
-                resultContent.innerHTML = `
-                    <div style="color: #ef4444; text-align: center; padding: 20px;">
-                        <p><strong>❌ Gagal menggenerate prompt</strong></p>
-                        <p style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
-                            ${error.message || 'Terjadi kesalahan saat menghubungi API AI'}
-                        </p>
-                        <button onclick="generatePrompt()" style="margin-top: 15px; padding: 8px 16px; background: #60a5fa; border: none; border-radius: 6px; color: white; cursor: pointer;">
-                            Coba Lagi
-                        </button>
-                    </div>
-                `;
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate';
-            }
-        }
-        
-        async function callGroqAPI(userInput) {
-            const systemPrompt = `Kamu adalah AI expert prompt engineer yang bertugas mengoptimalkan prompt untuk mendapatkan hasil terbaik dari AI. 
+    }
+
+    async function callGroqAPI(input) {
+        console.log('[callGroqAPI] input:', input);
+        const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+        };
+        // You can adjust the model and prompt template as needed
+        const body = {
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+                { role: 'system', content: `Kamu adalah AI expert prompt engineer yang bertugas mengoptimalkan prompt untuk mendapatkan hasil terbaik dari AI.
 
 Tugas kamu:
 1. Analisis input user dan pahami intent/tujuannya
@@ -862,83 +1139,509 @@ Tugas kamu:
    - Examples jika perlu
    - Step-by-step breakdown
 
-Berikan response dalam bahasa Indonesia dan buat prompt yang dioptimalkan langsung siap pakai.`;
-
-            const response = await fetch(GROQ_API_URL, {
+Berikan response dalam bahasa Indonesia dan buat prompt yang dioptimalkan langsung siap pakai.` },
+                { role: 'user', content: input }
+            ],
+            max_tokens: 512,
+            temperature: 0.7,
+            top_p: 0.9,
+            frequency_penalty: 0.5,
+            presence_penalty: 0.5,
+            stop: ['</s>']
+        };
+        try {
+            const response = await fetch(endpoint, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${GROQ_API_KEY}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    model: 'llama-3.3-70b-versatile', // atau 'mixtral-8x7b-32768'
-                    messages: [
-                        {
-                            role: 'system',
-                            content: systemPrompt
-                        },
-                        {
-                            role: 'user',
-                            content: `Optimalisasi prompt ini: "${userInput}"`
-                        }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 1000,
-                    top_p: 1,
-                    stream: false
-                })
+                headers,
+                body: JSON.stringify(body)
             });
-
+            console.log('[callGroqAPI] response status:', response.status);
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+                let errMsg = `Groq API error: ${response.status}`;
+                try { errMsg += ' ' + (await response.text()); } catch { }
+                throw new Error(errMsg);
             }
-
             const data = await response.json();
-            return data.choices[0]?.message?.content || 'Tidak ada response dari API';
-        }
-        
-        // Copy to Clipboard
-        function copyResult() {
-            const resultText = document.getElementById('resultContent').textContent;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(resultText).then(() => {
-                    showToast('Prompt berhasil disalin!');
-                });
-            } else {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = resultText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showToast('Prompt berhasil disalin!');
+            console.log('[callGroqAPI] data:', data);
+            if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+                throw new Error('Invalid API response: missing prompt result');
             }
+            return data.choices[0].message.content.trim();
+        } catch (err) {
+            console.error('[callGroqAPI] error:', err);
+            throw err;
         }
-        
-        // Toast Notification
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Initialize
-        updateGenerateButton();
-        updateApiStatus();
-        
-        // Close modal when clicking outside
-        document.getElementById('apiKeyModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeApiKeyModal();
-            }
-        });
+    }
+
+    // --- Ensure generatePrompt is triggered on form submit ---
+    document.getElementById('promptForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        generatePrompt();
+    });
+
+    // --- Add debug log for generatePrompt trigger ---
+    console.log('[App] Prompt Generator initialized.');
     </script>
+    <!-- Onboarding Modal Overlay (hidden by default, shown on first load) -->
+    <div id="onboardingOverlay" class="onboarding-overlay">
+        <!-- Animated Background -->
+        <div class="onboarding-bg-animation">
+            <div class="onboarding-floating-elements">
+                <div class="onboarding-floating-element">✨</div>
+                <div class="onboarding-floating-element">🚀</div>
+                <div class="onboarding-floating-element">💡</div>
+                <div class="onboarding-floating-element">⚡</div>
+            </div>
+        </div>
+        <!-- Main Onboarding Content -->
+        <div class="onboarding-container">
+            <div class="onboarding-logo-container">
+                <div class="onboarding-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+            </div>
+            <div class="onboarding-welcome-content">
+                <h1 class="onboarding-welcome-title">Selamat datang di AI Prompt Generator!</h1>
+                <p class="onboarding-welcome-subtitle">Siap untuk mengoptimalkan prompt AI super kreatif?</p>
+                <p class="onboarding-welcome-description">Transformasikan ide sederhana menjadi prompt AI yang powerful dan efektif</p>
+            </div>
+            <div class="onboarding-features">
+                <div class="onboarding-feature-item">
+                    <div class="onboarding-feature-icon">🎯</div>
+                    <div class="onboarding-feature-text">
+                        <div class="onboarding-feature-title">Optimasi Otomatis</div>
+                        <div class="onboarding-feature-desc">AI menganalisis dan memperbaiki prompt Anda</div>
+                    </div>
+                </div>
+                <div class="onboarding-feature-item">
+                    <div class="onboarding-feature-icon">⚡</div>
+                    <div class="onboarding-feature-text">
+                        <div class="onboarding-feature-title">Hasil Instan</div>
+                        <div class="onboarding-feature-desc">Dapatkan prompt yang dioptimalkan dalam hitungan detik</div>
+                    </div>
+                </div>
+                <div class="onboarding-feature-item">
+                    <div class="onboarding-feature-icon">📋</div>
+                    <div class="onboarding-feature-text">
+                        <div class="onboarding-feature-title">Copy & Paste</div>
+                        <div class="onboarding-feature-desc">Langsung salin dan gunakan di platform AI favorit</div>
+                    </div>
+                </div>
+            </div>
+            <div class="onboarding-action-buttons">
+                <button class="onboarding-btn primary" onclick="hideOnboarding()">Mulai Sekarang</button>
+            </div>
+        </div>
+        <div class="onboarding-progress-indicator">
+            <div class="onboarding-progress-dot active"></div>
+            <div class="onboarding-progress-dot"></div>
+            <div class="onboarding-progress-dot"></div>
+        </div>
+    </div>
+
+    <script src="pocket-debug.js"></script>
+    <script>
+function copyResult() {
+    const resultContent = document.getElementById('resultContent');
+    const inputTextArea = document.getElementById('inputText');
+    if (!resultContent || !resultContent.textContent.trim()) {
+        showToast('Tidak ada hasil prompt untuk disalin!', 'error');
+        return;
+    }
+    const resultText = resultContent.textContent;
+    const inputTextVal = inputTextArea ? inputTextArea.value.trim() : '';
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(resultText).then(() => {
+            showToast('Prompt berhasil disalin!', 'success');
+            savePromptToPocket(inputTextVal, resultText);
+        }).catch(() => {
+            showToast('Gagal menyalin prompt!', 'error');
+        });
+    } else {
+        // Fallback for older browsers
+        try {
+            const textArea = document.createElement('textarea');
+            textArea.value = resultText;
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = 0;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            if (successful) {
+                showToast('Prompt berhasil disalin!', 'success');
+                savePromptToPocket(inputTextVal, resultText);
+            } else {
+                showToast('Gagal menyalin prompt!', 'error');
+            }
+        } catch {
+            showToast('Gagal menyalin prompt!', 'error');
+        }
+    }
+}
+
+// PROMPT POCKET LOGIC
+function savePromptToPocket(input, result) {
+    if (!input || !input.trim() || !result || !result.trim()) return;
+    let pocket = loadPromptPocket();
+    // Hindari duplikat persis di urutan teratas
+    if (pocket.length && pocket[0].input && pocket[0].input.trim() === input.trim() && pocket[0].result.trim() === result.trim()) return;
+    const now = new Date();
+    const pad = n => n.toString().padStart(2,'0');
+    const timestamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    pocket.unshift({input: input.trim(), result: result.trim(), timestamp});
+    if (pocket.length > 50) pocket = pocket.slice(0, 50); // Batas maksimum 50 prompt
+    localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+    renderPromptPocket();
+}
+
+function loadPromptPocket() {
+    try {
+        const arr = JSON.parse(localStorage.getItem('prompt_pocket')) || [];
+        // Backward compatibility: jika data lama (hanya text/timestamp)
+        return arr.map(item => {
+            if (typeof item === 'string') return {input: item, result: item, timestamp: ''};
+            if (item.text && !item.input) return {input: item.text, result: item.text, timestamp: item.timestamp||''};
+            return item;
+        });
+    } catch {
+        return [];
+    }
+}
+
+function renderPromptPocket() {
+    const listDiv = document.getElementById('promptPocketList');
+    const pocket = loadPromptPocket();
+    if (!listDiv) return;
+    if (!pocket.length) {
+        listDiv.innerHTML = `<div style='text-align:center; color:rgba(255,255,255,0.6);padding:48px 0;'>Belum ada prompt yang disimpan.<br>Salin prompt apapun untuk menyimpannya di sini.</div>`;
+        return;
+    }
+    listDiv.innerHTML = pocket.map((item, idx) => `
+        <div class="pocket-item" data-pocket-idx="${idx}" style="background:rgba(255,255,255,0.07);border-radius:10px;padding:14px 14px 10px 14px;margin-bottom:18px;position:relative;box-shadow:0 2px 8px rgba(30,41,59,0.07);display:flex;align-items:center;gap:10px;cursor:pointer;transition:background 0.15s;" tabindex="0">
+            <div style="flex:1;white-space:pre-wrap;color:#e2e8f0;font-size:15px;word-break:break-word;">
+                ${item.input.replace(/</g,'&lt;')}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:end;gap:4px;min-width:95px;">
+                <span style="font-size:12px;color:#a5b4fc;">${item.timestamp}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Event delegation for Prompt Pocket row click
+(function() {
+    const listDiv = document.getElementById('promptPocketList');
+    if (!listDiv) return;
+    listDiv.addEventListener('click', function(e) {
+        const itemDiv = e.target.closest('.pocket-item');
+        if (itemDiv) {
+            const idx = parseInt(itemDiv.getAttribute('data-pocket-idx'));
+            showPromptPocketPopup(idx);
+        }
+    });
+})();
+
+// Modal for Prompt Pocket popup
+function showPromptPocketPopup(idx) {
+    const pocket = loadPromptPocket();
+    if (!pocket[idx]) return;
+    let modal = document.getElementById('pocketPopupModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'pocketPopupModal';
+        modal.style = 'display:flex;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.70);z-index:2000;align-items:center;justify-content:center;';
+        modal.innerHTML = `
+            <div style="background:#232e3e;padding:32px 22px 22px 22px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 8px 32px rgba(30,41,59,0.22);position:relative;min-width:320px;">
+                <button id="pocketPopupClose" style="position:absolute;top:8px;right:12px;background:none;border:none;color:#a5b4fc;font-size:22px;cursor:pointer;">✕</button>
+                <div style="font-size:13px;color:#a5b4fc;margin-bottom:8px;">Prompt yang disimpan:</div>
+                <div id="pocketPopupContent" style="white-space:pre-wrap;color:#e2e8f0;font-size:16px;margin-bottom:18px;"></div>
+                <div style="display:flex;gap:12px;justify-content:flex-end;">
+                    <button id="pocketPopupCopy" style="background:#60a5fa;border:none;color:#fff;padding:7px 18px;border-radius:7px;font-size:14px;cursor:pointer;">Salin</button>
+                    <button id="pocketPopupDelete" style="background:#ef4444;border:none;color:#fff;padding:7px 18px;border-radius:7px;font-size:14px;cursor:pointer;">Hapus</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    document.getElementById('pocketPopupContent').textContent = pocket[idx].result || pocket[idx].input || '-';
+    modal.style.display = 'flex';
+    // Close
+    document.getElementById('pocketPopupClose').onclick = function() {
+        modal.style.display = 'none';
+    };
+    // Copy
+    document.getElementById('pocketPopupCopy').onclick = function() {
+        const text = pocket[idx].result || pocket[idx].input || '';
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Prompt berhasil disalin!', 'success');
+            }).catch(() => {
+                showToast('Gagal menyalin prompt!', 'error');
+            });
+        } else {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = 0;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    showToast('Prompt berhasil disalin!', 'success');
+                } else {
+                    showToast('Gagal menyalin prompt!', 'error');
+                }
+            } catch {
+                showToast('Gagal menyalin prompt!', 'error');
+            }
+        }
+    };
+    // Delete
+    document.getElementById('pocketPopupDelete').onclick = function() {
+        if (!window.confirm('Yakin ingin menghapus prompt ini?')) return;
+        const pocket = loadPromptPocket();
+        pocket.splice(idx, 1);
+        localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+        renderPromptPocket();
+        modal.style.display = 'none';
+        showToast('Prompt dihapus', 'success');
+    };
+}
+
+
+// Event delegation for Prompt Pocket actions
+(function() {
+    const listDiv = document.getElementById('promptPocketList');
+    if (!listDiv) return;
+    listDiv.addEventListener('click', function(e) {
+        const viewBtn = e.target.closest('.pocket-view-btn');
+        const delBtn = e.target.closest('.pocket-delete-btn');
+        if (viewBtn) {
+            const idx = parseInt(viewBtn.getAttribute('data-pocket-idx'));
+            showPromptPocketResultModal(idx);
+            e.stopPropagation();
+            return;
+        }
+        if (delBtn) {
+            const idx = parseInt(delBtn.getAttribute('data-pocket-idx'));
+            deletePromptFromPocket(idx);
+            e.stopPropagation();
+            return;
+        }
+    });
+})();
+
+
+function showPromptPocketResultModal(idx) {
+    const pocket = loadPromptPocket();
+    if (!pocket[idx]) return;
+    const modal = document.getElementById('pocketResultModal');
+    const content = document.getElementById('pocketResultModalContent');
+    content.textContent = pocket[idx].result || '-';
+    modal.style.display = 'flex';
+}
+
+function deletePromptFromPocket(idx) {
+    const pocket = loadPromptPocket();
+    if (!pocket[idx]) return;
+    const confirmMsg = `Yakin ingin menghapus prompt berikut?\n\n\"${pocket[idx].input.replace(/"/g, '\"').substring(0, 80)}${pocket[idx].input.length > 80 ? '…' : ''}\"`;
+    if (!window.confirm(confirmMsg)) return;
+    pocket.splice(idx, 1);
+    localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+    renderPromptPocket();
+}
+
+
+// Render Prompt Pocket saat membuka layar Prompt Pocket
+document.querySelector('a.menu-item[href="#"][onclick*="prompt-pocket"]').addEventListener('click', function() {
+    setTimeout(renderPromptPocket, 100); // delay agar layar sudah terlihat
+});
+// Juga render saat halaman pertama kali dibuka
+window.addEventListener('DOMContentLoaded', renderPromptPocket);
+
+
+// PROMPT POCKET LOGIC
+function savePromptToPocket(text) {
+    if (!text || !text.trim()) return;
+    let pocket = loadPromptPocket();
+    // Hindari duplikat persis di urutan teratas
+    if (pocket.length && pocket[0].text.trim() === text.trim()) return;
+    const now = new Date();
+    const pad = n => n.toString().padStart(2,'0');
+    const timestamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    pocket.unshift({text: text.trim(), timestamp});
+    if (pocket.length > 50) pocket = pocket.slice(0, 50); // Batas maksimum 50 prompt
+    localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+    renderPromptPocket();
+}
+
+function loadPromptPocket() {
+    try {
+        return JSON.parse(localStorage.getItem('prompt_pocket')) || [];
+    } catch {
+        return [];
+    }
+}
+
+function renderPromptPocket() {
+    const listDiv = document.getElementById('promptPocketList');
+    const pocket = loadPromptPocket();
+    if (!listDiv) return;
+    if (!pocket.length) {
+        listDiv.innerHTML = `<div style='text-align:center; color:rgba(255,255,255,0.6);padding:48px 0;'>Belum ada prompt yang disimpan.<br>Salin prompt apapun untuk menyimpannya di sini.</div>`;
+        return;
+    }
+    listDiv.innerHTML = pocket.map((item, idx) => `
+        <div style="background:rgba(255,255,255,0.07);border-radius:10px;padding:16px 14px 10px 14px;margin-bottom:18px;position:relative;box-shadow:0 2px 8px rgba(30,41,59,0.07);">
+            <div style="white-space:pre-wrap;color:#e2e8f0;font-size:15px;margin-bottom:10px;">${item.text.replace(/</g,'&lt;')}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#a5b4fc;">
+                <span>Disimpan: ${item.timestamp}</span>
+                <button onclick="deletePromptFromPocket(${idx})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:6px;">Hapus</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function deletePromptFromPocket(idx) {
+    let pocket = loadPromptPocket();
+    if (idx >= 0 && idx < pocket.length) {
+        pocket.splice(idx, 1);
+        localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+        renderPromptPocket();
+    }
+}
+
+// Render Prompt Pocket saat membuka layar Prompt Pocket
+document.querySelector('a.menu-item[href="#"][onclick*="prompt-pocket"]').addEventListener('click', function() {
+    setTimeout(renderPromptPocket, 100); // delay agar layar sudah terlihat
+});
+// Juga render saat halaman pertama kali dibuka
+window.addEventListener('DOMContentLoaded', renderPromptPocket);
+
+    // ONBOARDING LOGIC
+    function hideOnboarding() {
+        const overlay = document.getElementById('onboardingOverlay');
+        overlay.classList.add('hide');
+        setTimeout(() => { overlay.style.display = 'none'; }, 350);
+        // Optional: set flag in localStorage to not show onboarding again
+        localStorage.setItem('onboarding_shown', '1');
+    }
+    function onboardingLearnMore() {
+        alert('Menampilkan tutorial atau informasi lebih lanjut');
+    }
+    // Show onboarding only if not shown before
+    window.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('onboarding_shown')) {
+            document.getElementById('onboardingOverlay').style.display = 'flex';
+        } else {
+            document.getElementById('onboardingOverlay').style.display = 'none';
+        }
+    });
+    </script>
+
+</body>
+</html>
+function savePromptToPocket(text) {
+    if (!text || !text.trim()) return;
+    let pocket = loadPromptPocket();
+    // Hindari duplikat persis di urutan teratas
+    if (pocket.length && pocket[0].text.trim() === text.trim()) return;
+    const now = new Date();
+    const pad = n => n.toString().padStart(2,'0');
+    const timestamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    pocket.unshift({text: text.trim(), timestamp});
+    if (pocket.length > 50) pocket = pocket.slice(0, 50); // Batas maksimum 50 prompt
+    localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+    renderPromptPocket();
+}
+
+function loadPromptPocket() {
+    try {
+        return JSON.parse(localStorage.getItem('prompt_pocket')) || [];
+    } catch {
+        return [];
+    }
+}
+
+function renderPromptPocket() {
+    const listDiv = document.getElementById('promptPocketList');
+    const pocket = loadPromptPocket();
+    if (!listDiv) return;
+    if (!pocket.length) {
+        listDiv.innerHTML = `<div style='text-align:center; color:rgba(255,255,255,0.6);padding:48px 0;'>Belum ada prompt yang disimpan.<br>Salin prompt apapun untuk menyimpannya di sini.</div>`;
+        return;
+    }
+    listDiv.innerHTML = pocket.map((item, idx) => `
+        <div style="background:rgba(255,255,255,0.07);border-radius:10px;padding:16px 14px 10px 14px;margin-bottom:18px;position:relative;box-shadow:0 2px 8px rgba(30,41,59,0.07);">
+            <div style="white-space:pre-wrap;color:#e2e8f0;font-size:15px;margin-bottom:10px;">${item.text.replace(/</g,'&lt;')}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#a5b4fc;">
+                <span>Disimpan: ${item.timestamp}</span>
+                <button onclick="deletePromptFromPocket(${idx})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:6px;">Hapus</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function deletePromptFromPocket(idx) {
+    let pocket = loadPromptPocket();
+    if (idx >= 0 && idx < pocket.length) {
+        pocket.splice(idx, 1);
+        localStorage.setItem('prompt_pocket', JSON.stringify(pocket));
+        renderPromptPocket();
+    }
+}
+
+// Render Prompt Pocket saat membuka layar Prompt Pocket
+document.querySelector('a.menu-item[href="#"][onclick*="prompt-pocket"]').addEventListener('click', function() {
+    setTimeout(renderPromptPocket, 100); // delay agar layar sudah terlihat
+});
+// Juga render saat halaman pertama kali dibuka
+window.addEventListener('DOMContentLoaded', renderPromptPocket);
+
+    // ONBOARDING LOGIC
+    function hideOnboarding() {
+        const overlay = document.getElementById('onboardingOverlay');
+        overlay.classList.add('hide');
+        setTimeout(() => { overlay.style.display = 'none'; }, 350);
+        // Optional: set flag in localStorage to not show onboarding again
+        localStorage.setItem('onboarding_shown', '1');
+    }
+    function onboardingLearnMore() {
+        alert('Menampilkan tutorial atau informasi lebih lanjut');
+    }
+    // Show onboarding only if not shown before
+    window.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('onboarding_shown')) {
+            document.getElementById('onboardingOverlay').style.display = 'flex';
+        } else {
+            document.getElementById('onboardingOverlay').style.display = 'none';
+        }
+    });
+    </script>
+
+</body>
+</html>
+
+</body>
+</html>
+</html>
+    </script>
+
+</body>
+</html>
+        }
+    });
+    </script>
+
+</body>
+</html>
+</body>
+</html>
+</html>
 </body>
 </html>
